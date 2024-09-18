@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/camdenwithrow/rdmapp/config"
+	"github.com/camdenwithrow/rdmapp/db"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -18,6 +19,10 @@ type (
 func main() {
 	hosts := map[string]*Host{}
 	cfg := config.GetConfig()
+
+	store := db.NewSQLStore()
+	defer store.Close()
+	store.GetUsers()
 
 	admin := echo.New()
 	admin.Use(middleware.Logger())
