@@ -6,6 +6,7 @@ import (
 )
 
 type Store interface {
+	Close()
 	// GetUser() (*goth.User, error)
 	GetUsers()
 	// GetUser(id string) (types.User, error)
@@ -16,10 +17,14 @@ type SQLStore struct {
 	db *sql.DB
 }
 
-func NewSQLStore(db *sql.DB) Store {
+func NewSQLStore() Store {
 	return SQLStore{
-		db: db,
+		db: OpenSqliteDB(),
 	}
+}
+
+func (store SQLStore) Close() {
+	store.db.Close()
 }
 
 func (store SQLStore) GetUsers() {
