@@ -7,13 +7,12 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func OpenDB() {
+func OpenSqliteDB() *sql.DB {
 	// Open the database file. If it doesn't exist, create it.
 	db, err := sql.Open("sqlite3", "test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
@@ -31,6 +30,11 @@ func OpenDB() {
 		log.Fatal(err)
 	}
 
+	return db
+
+}
+
+func insertData(db *sql.DB) {
 	// Insert some data
 	stmt, err := db.Prepare("INSERT INTO users(name, age) VALUES(?, ?)")
 	if err != nil {
@@ -45,20 +49,6 @@ func OpenDB() {
 
 	log.Println("Data inserted successfully")
 
-	// Query the data
-	rows, err := db.Query("SELECT id, name, age FROM users")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
+	return db
 
-	for rows.Next() {
-		var id, age int
-		var name string
-		err := rows.Scan(&id, &name, &age)
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Printf("ID: %d, Name: %s, Age: %d\n", id, name, age)
-	}
 }
