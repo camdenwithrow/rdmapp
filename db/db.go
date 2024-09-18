@@ -33,19 +33,3 @@ func OpenSqliteDB() *sql.DB {
 	return db
 
 }
-
-func insertData(db *sql.DB, age int) {
-	// Insert some data
-	stmt, err := db.Prepare("INSERT INTO users(name, age) VALUES(?, ?)")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec("Alice", age)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println("Data inserted successfully")
-}
