@@ -3,9 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"os"
 
-	_ "github.com/joho/godotenv/autoload"
+	"github.com/camdenwithrow/rdmapp/config"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -18,20 +17,12 @@ type (
 
 func main() {
 	hosts := map[string]*Host{}
-	port, exists := os.LookupEnv("PORT")
-	if !exists {
-		port = "4321"
-	}
-
-	hostDomain, exists := os.LookupEnv("HOST")
-	if !exists {
-		hostDomain = "localhost"
-	}
+	cfg := config.GetConfig()
 
 	admin := echo.New()
 	admin.Use(middleware.Logger())
 	admin.Use(middleware.Recover())
-	hosts[fmt.Sprintf("admin.%s:%s", hostDomain, port)] = &Host{admin}
+	hosts[fmt.Sprintf("admin.%s:%s", cfg.PublicHost, cfg.Port)] = &Host{admin}
 
 	admin.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Admin")
@@ -40,7 +31,7 @@ func main() {
 	site := echo.New()
 	site.Use(middleware.Logger())
 	site.Use(middleware.Recover())
-	hosts[fmt.Sprintf("%s:%s", hostDomain, port)] = &Host{site}
+	hosts[fmt.Sprintf("%s:%s", cfg.PublicHost, cfg.Port)] = &Host{site}
 
 	site.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Website")
@@ -61,5 +52,5 @@ func main() {
 		return
 	})
 
-	e.Logger.Fatal(e.Start(":4321"))
+	e.Logger.Fatal(e.Start(":" + cfg.Port))
 }
