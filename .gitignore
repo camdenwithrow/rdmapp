@@ -10,3 +10,5 @@ tmp
 *.db
 
 **/*_templ.go
+
+static/css/output.css
