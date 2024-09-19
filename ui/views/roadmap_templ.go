@@ -47,20 +47,20 @@ func columnCard(title string) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"border border-zinc-200 dark:border-zinc-900 rounded bg-zinc-50 dark:bg-zinc-800\"><div class=\"p-0 gap-0\"><h2 class=\"pt-3 pb-2 px-4 text-sm lg:text-base text-nowrap text-zinc-600 dark:text-zinc-400\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"relative h-0 min-h-full max-h-full overflow-hidden border border-zinc-200 dark:border-zinc-900 rounded bg-zinc-50 dark:bg-zinc-800\"><h2 class=\"pt-3 pb-2 px-4 text-sm lg:text-base text-nowrap text-zinc-600 dark:text-zinc-400 shadow-teal-500\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/views/roadmap.templ`, Line: 21, Col: 103}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/views/roadmap.templ`, Line: 20, Col: 118}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h2>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h2><div class=\"overflow-y-auto h-[calc(100%-2.5rem)]\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -68,7 +68,7 @@ func columnCard(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><span class=\"absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-zinc-50/95 to-zinc-50/0\"></span></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -154,11 +154,7 @@ func Roadmap() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			templ_7745c5c3_Err = themeController().Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"md:grid md:grid-cols-4 md:gap-2 p-4\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"h-full max-h-full md:grid md:grid-cols-4 md:gap-2 p-4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -16,11 +16,12 @@ templ themeController() {
 }
 
 templ columnCard(title string) {
-	<div class="border border-zinc-200 dark:border-zinc-900 rounded bg-zinc-50 dark:bg-zinc-800">
-		<div class="p-0 gap-0">
-			<h2 class="pt-3 pb-2 px-4 text-sm lg:text-base text-nowrap text-zinc-600 dark:text-zinc-400">{ title }</h2>
+	<div class="relative h-0 min-h-full max-h-full overflow-hidden border border-zinc-200 dark:border-zinc-900 rounded bg-zinc-50 dark:bg-zinc-800">
+		<h2 class="pt-3 pb-2 px-4 text-sm lg:text-base text-nowrap text-zinc-600 dark:text-zinc-400 shadow-teal-500">{ title }</h2>
+		<div class="overflow-y-auto h-[calc(100%-2.5rem)]">
 			{ children... }
 		</div>
+		<span class="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-zinc-50/95 to-zinc-50/0"></span>
 	</div>
 }
 
@@ -64,8 +65,7 @@ templ feature() {
 
 templ Roadmap() {
 	@Base() {
-		@themeController()
-		<div class="md:grid md:grid-cols-4 md:gap-2 p-4">
+		<div class="h-full max-h-full md:grid md:grid-cols-4 md:gap-2 p-4">
 			for _, val := range []string{"Under Consideration", "Planned", "Rejected", "Completed"} {
 				@columnCard(val) {
 					for i := 0; i < 100; i++ {
