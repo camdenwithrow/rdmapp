@@ -2,7 +2,6 @@ package local
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	"github.com/camdenwithrow/rdmapp/db"
@@ -41,5 +40,19 @@ func (store DevSQLiteStore) GetUsers() {
 }
 
 func (store DevSQLiteStore) GetFeatures() {
-	fmt.Println("features")
+	rows, err := store.db.Query("SELECT id, name, description FROM features")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		var name, description string
+		err := rows.Scan(&id, &name, &description)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("ID: %d, Name: %s, Description: %s\n", id, name, description)
+	}
 }

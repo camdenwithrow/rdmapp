@@ -25,6 +25,7 @@ func main() {
 
 	store := local.NewDevSQLiteStore()
 	defer store.Close()
+	store.GetFeatures()
 	// store.GetUsers()
 
 	admin := echo.New()
