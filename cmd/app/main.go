@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/camdenwithrow/rdmapp/config"
-	"github.com/camdenwithrow/rdmapp/handlers"
-	"github.com/camdenwithrow/rdmapp/ui/views"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+
+	"github.com/camdenwithrow/rdmapp/config"
+	local "github.com/camdenwithrow/rdmapp/db/sqlite/dev"
+	"github.com/camdenwithrow/rdmapp/handlers"
+	"github.com/camdenwithrow/rdmapp/ui/views"
 )
 
 type (
@@ -21,8 +23,9 @@ func main() {
 	hosts := map[string]*Host{}
 	cfg := config.GetConfig()
 
-	// store := db.NewSQLStore()
-	// defer store.Close()
+	store := local.NewDevSQLiteStore()
+	defer store.Close()
+	// store.GetFeatures()
 	// store.GetUsers()
 
 	admin := echo.New()
