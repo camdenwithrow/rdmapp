@@ -3,7 +3,6 @@ package views
 templ themeController() {
 	<script>
 		function toggleDarkMode() {
-
 			const darkModeOn = document.documentElement.classList.contains('dark')
 			if(darkModeOn) {
 				document.documentElement.classList.remove('dark')
@@ -16,18 +15,18 @@ templ themeController() {
 }
 
 templ columnCard(title string) {
-	<div class="relative h-0 min-h-full max-h-full overflow-hidden    rounded bg-zinc-50 dark:bg-zinc-800">
+	<div class="relative h-0 min-h-full max-h-full overflow-hidden  border-r last:border-0 dark:border-zinc-700">
 		<h2 class="pt-3 pb-2 px-4 font-bold text-sm text-nowrap text-zinc-600 dark:text-zinc-400 shadow-teal-500">{ title }</h2>
 		<div class="overflow-y-auto h-[calc(100%-2.5rem)]">
 			{ children... }
 		</div>
-		<span class="absolute z-10 bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-zinc-100 to-zinc-100/0"></span>
+		<span class="absolute z-10 bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-zinc-50 to-zinc-50/0 dark:from-zinc-900 dark:to-zinc-900/0"></span>
 	</div>
 }
 
 templ upArrowIcon() {
 	<svg
-		class="fill-zinc-500 group-hover/upvote:fill-zinc-100 dark:fill-zinc-400 dark:group-hover/upvote:fill-zinc-800 transition-colors duration-200"
+		class="fill-zinc-500 group-hover/upvote:fill-zinc-100 dark:fill-zinc-400 dark:group-hover/upvote:fill-zinc-900 transition-colors duration-200"
 		version="1.1"
 		id="Layer_1"
 		xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +44,7 @@ templ upArrowIcon() {
 }
 
 templ feature() {
-	<div class="relative group/feature flex cursor-pointer gap-3 py-4 pr-4 hover:bg-zinc-200/60 dark:hover:bg-zinc-900/50">
+	<div class="relative group/feature flex cursor-pointer gap-3 py-4 pr-4 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/50">
 		<div class="flex flex-col items-center ml-4 w-12">
 			<button type="button" class="group/upvote peer/upvote h-7 min-h-7 w-7 p-1.5 mt-1 transition-colors border border-zinc-400 hover:bg-zinc-600 hover:border-zinc-600 dark:border-zinc-500 dark:hover:bg-zinc-300 dark:hover:border-zinc-300 rounded">
 				@upArrowIcon()
@@ -65,14 +64,17 @@ templ feature() {
 
 templ Roadmap() {
 	@Base() {
-		<div class="h-full max-h-full flex flex-col md:grid md:grid-cols-4 gap-2 p-4">
-			for _, val := range []string{"Under Consideration", "Planned", "Rejected", "Completed"} {
-				@columnCard(val) {
-					for i := 0; i < 5; i++ {
-						@feature()
+		<div class="h-full max-h-full p-4">
+			@themeController()
+			<div class="h-full flex flex-col md:grid md:grid-cols-4 shadow rounded bg-zinc-50 dark:bg-zinc-900 dark:border dark:border-zinc-700">
+				for _, val := range []string{"Under Consideration", "Planned", "Rejected", "Completed"} {
+					@columnCard(val) {
+						for i := 0; i < 50; i++ {
+							@feature()
+						}
 					}
 				}
-			}
+			</div>
 		</div>
 	}
 }
