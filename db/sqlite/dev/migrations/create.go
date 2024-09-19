@@ -3,6 +3,7 @@ package migrations
 import "fmt"
 
 func createTables() {
+	//TODO: OWNER TABLE and fix columns based on models
 	users := `CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT UNIQUE NOT NULL,
@@ -55,7 +56,6 @@ func createTables() {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     feature_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
-    vote_type TEXT CHECK(vote_type IN ('upvote', 'downvote')) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (feature_id) REFERENCES features (id),
     FOREIGN KEY (user_id) REFERENCES users (id),
