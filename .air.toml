@@ -5,7 +5,9 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "./tmp/main"
-  cmd = "(cd ui && npx tailwindcss -i ./styles.css -o ../static/css/output.css) && templ generate && go build -o ./tmp/main ./cmd/app"
+  pre_cmd = ["(cd ui && npx tailwindcss -i ./styles.css -o ../static/css/output.css)", "templ generate"]
+  cmd = "go build -o ./tmp/main ./cmd/app"
+  post_cmd = []
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata", "ui/node_modules"]
   exclude_file = []
@@ -20,8 +22,6 @@ tmp_dir = "tmp"
   log = "build-errors.log"
   poll = false
   poll_interval = 0
-  post_cmd = []
-  pre_cmd = []
   rerun = false
   rerun_delay = 500
   send_interrupt = false
@@ -44,3 +44,7 @@ tmp_dir = "tmp"
 [screen]
   clear_on_rebuild = false
   keep_scroll = true
+[proxy]
+  enabled = true
+  proxy_port = 9000
+  app_port = 4321
