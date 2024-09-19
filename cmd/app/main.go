@@ -5,7 +5,8 @@ import (
 	"net/http"
 
 	"github.com/camdenwithrow/rdmapp/config"
-	"github.com/camdenwithrow/rdmapp/db"
+	"github.com/camdenwithrow/rdmapp/handlers"
+	"github.com/camdenwithrow/rdmapp/ui/views"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -20,9 +21,9 @@ func main() {
 	hosts := map[string]*Host{}
 	cfg := config.GetConfig()
 
-	store := db.NewSQLStore()
-	defer store.Close()
-	store.GetUsers()
+	// store := db.NewSQLStore()
+	// defer store.Close()
+	// store.GetUsers()
 
 	admin := echo.New()
 	admin.Use(middleware.Logger())
@@ -39,10 +40,13 @@ func main() {
 	hosts[fmt.Sprintf("%s:%s", cfg.PublicHost, cfg.Port)] = &Host{site}
 
 	site.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Website")
+		// return c.String(http.StatusOK, "Website")
+		return handlers.Render(c, http.StatusOK, views.Roadmap())
 	})
 
 	e := echo.New()
+	e.Static("/static", "static")
+
 	e.Any("/*", func(c echo.Context) (err error) {
 		req := c.Request()
 		res := c.Response()

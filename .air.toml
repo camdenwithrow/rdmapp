@@ -5,11 +5,11 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "./tmp/main"
-  cmd = "(cd ui && npx tailwindcss -i ./styles.css -o ./static/css/output.css) && go build -o ./tmp/main ./cmd/app"
+  cmd = "(cd ui && npx tailwindcss -i ./styles.css -o ../static/css/output.css) && templ generate && go build -o ./tmp/main ./cmd/app"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata", "ui/node_modules"]
   exclude_file = []
-  exclude_regex = ["_test.go"]
+  exclude_regex = ["_templ.go","_test.go"]
   exclude_unchanged = false
   follow_symlink = false
   full_bin = ""
