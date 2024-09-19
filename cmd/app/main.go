@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/camdenwithrow/rdmapp/config"
-	local "github.com/camdenwithrow/rdmapp/db/sqlite/dev"
+	devDB "github.com/camdenwithrow/rdmapp/db/sqlite/dev"
 	"github.com/camdenwithrow/rdmapp/handlers"
 	"github.com/camdenwithrow/rdmapp/ui/views"
 )
@@ -23,7 +23,8 @@ func main() {
 	hosts := map[string]*Host{}
 	cfg := config.GetConfig()
 
-	store := local.NewDevSQLiteStore()
+	// store := dev.NewDevSQLiteStore()
+	store := devDB.NewDevSQLiteStore()
 	defer store.Close()
 	// store.GetFeatures()
 	// store.GetUsers()

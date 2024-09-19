@@ -1,4 +1,4 @@
-package local
+package dev
 
 import (
 	"database/sql"
