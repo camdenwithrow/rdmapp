@@ -60,10 +60,11 @@ function openDialog(id) {
 
 	setTimeout(() => {
 		darkenBackground(background)
-
+	}, 1)
+	setTimeout(() => {
 		dialog.classList.remove("scale-90", "opacity-0")
 		dialog.classList.add("scale-100", "opacity-100")
-	}, 1)
+	}, 20)
 }
 
 function closeDialog(id) {
@@ -77,4 +78,9 @@ function closeDialog(id) {
 	setTimeout(() => {
 		container.classList.add("hidden")
 	}, 400)
+}
+
+function openFeatureDialog(element: HTMLDivElement) {
+	element.getAttribute("id")
+
 }
