@@ -1,10 +1,23 @@
 package components
 
+func createId(id string, elementDescriptor string) (string, error) {
+	return templ.JSONString("sanitize:" + id + "-" + elementDescriptor)
+}
+
 templ Sheet(id string) {
-	<div id="feature-request-sheet-container" class="hidden absolute inset-0">
+	<div id={ createId(id, "sheet-container") } class="hidden absolute inset-0">
 		<div class="relative w-full h-full">
-			<div id="feature-request-sheet-bg" onclick="closeSheet('feature-request')" class="absolute inset-0 z-40 transition-all duration-500 bg-zinc-50/0"></div>
-			<div id="feature-request-sheet" class="absolute w-full  sm:w-[40rem] top-0 bottom-0 right-0 transform transition-transform duration-[400ms] translate-x-full z-50 rounded bg-zinc-50"></div>
+			<div id={ createId(id, "sheet-bg") } onclick="closeSheet('feature-request')" class="absolute inset-0 z-40 transition-all duration-500 bg-zinc-50/0"></div>
+			<div id={ createId(id, "sheet") } class="absolute w-full  sm:w-[40rem] top-0 bottom-0 right-0 transform transition-transform duration-[400ms] translate-x-full z-50 rounded bg-zinc-50"></div>
+		</div>
+	</div>
+}
+
+templ Dialog(id string) {
+	<div id={ createId(id, "dialog-container") } class="hidden absolute inset-0">
+		<div class="relative w-full h-full">
+			<div id={ createId(id, "dialog-bg") } onclick="closeDialog('feature')" class="absolute inset-0 z-40 transition-all duration-500 bg-zinc-50/0"></div>
+			<div id={ createId(id, "dialog") } class="absolute w-96 h-96 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform transition-transform scale-90 duration-[400ms] transition-opacity opacity-0 z-50 rounded bg-zinc-50"></div>
 		</div>
 	</div>
 }
