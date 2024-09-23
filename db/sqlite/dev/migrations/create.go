@@ -99,38 +99,55 @@ func InsertMockData(db *sql.DB) {
 	mockUsers := []struct {
 		email string
 	}{
-		{"user1@example.com"}, {"user1@example.com"}, {"admin@example.com"},
+		{"user1@example.com"}, {"user2@example.com"}, {"admin@example.com"},
 	}
+
+	mockOwners := []struct {
+		userId uint
+	}{{1}}
+
 	mockRoadmaps := []struct {
 		ownerId uint
 		slug    string
 		title   string
 		logo    string
 	}{{1, "roadmap1", "roadmap1", "https://placehold.co/60x40"}}
+
 	mockFeatures := []struct {
+		roadmapId   uint
 		name        string
 		description string
 		status      string
 		priority    int
 	}{
-		{"User Profiles", "Allow users to create and edit their profiles", "planned", 1},
-		{"Dark Mode", "Add a dark mode theme for the application", "in progress", 2},
-		{"Analytics Dashboard", "Provide users with an analytics dashboard", "planned", 3},
-		{"Email Notifications", "Send email notifications for important events", "completed", 2},
-		{"Multi-language Support", "Support multiple languages in the app", "planned", 4},
+		{1, "User Profiles", "Allow users to create and edit their profiles", "planned", 1},
+		{1, "Dark Mode", "Add a dark mode theme for the application", "in progress", 2},
+		{1, "Analytics Dashboard", "Provide users with an analytics dashboard", "planned", 3},
+		{1, "Email Notifications", "Send email notifications for important events", "completed", 2},
+		{1, "Multi-language Support", "Support multiple languages in the app", "planned", 4},
 	}
 
 	// SQL statement to insert a feature
 	insertUserSQL := `INSERT INTO users (email) VALUES (?);`
+	insertOwnersSQL := `INSERT INTO owners (user_id) VALUES (?)`
 	insertRoadmapSQL := `INSERT INTO roadmaps (owner_id, slug, title, logo) VALUES (?, ?, ?, ?);`
 	insertFeatureSQL := `INSERT INTO features (roadmap_id, name, description, status, priority) VALUES (?, ?, ?, ?, ?);`
 
+	fmt.Println("INSERTING")
 	for _, user := range mockUsers {
 		_, err := db.Exec(insertUserSQL, user.email)
 		if err != nil {
 			log.Printf("Error inserting user '%s': %v", user.email, err)
 		} else {
 			log.Printf("Inserted user: %s", user.email)
+		}
+	}
+	for _, owner := range mockOwners {
+		_, err := db.Exec(insertOwnersSQL, owner.userId)
+		if err != nil {
+			log.Printf("Error inserting user '%s': %v", owner.userId, err)
+		} else {
+			log.Printf("Inserted user: %s", owner.userId)
 		}
 	}
 	var lastRoadmapId int64
@@ -149,7 +166,7 @@ func InsertMockData(db *sql.DB) {
 		log.Printf("Got roadmap id: %d", lastRoadmapId)
 	}
 	for _, feature := range mockFeatures {
-		_, err := db.Exec(insertFeatureSQL, lastRoadmapId, feature.name, feature.description, feature.status, feature.priority)
+		_, err := db.Exec(insertFeatureSQL, feature.roadmapId, feature.name, feature.description, feature.status, feature.priority)
 		if err != nil {
 			log.Printf("Error inserting feature '%s': %v", feature.name, err)
 		} else {
