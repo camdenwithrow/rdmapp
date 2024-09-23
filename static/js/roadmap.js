@@ -80,7 +80,23 @@ function closeDialog(id) {
 	}, 400)
 }
 
-function handleUpvote(buttonEl) {
-	const featureId = JSON.parse(buttonEl.getAttribute("feature-id"))
-	console.log(featureId)
+function verifyContributorEmail(element) {
+	console.log("Hello")
+	const storedValue = localStorage.getItem('contributorEmail')
+
+	if (!storedValue) {
+		// evt.detail.xhr.abort()
+		htmx.trigger(`#${element.id}`, 'htmx:abort')
+
+		openDialog("contributor-email")
+
+		const submitButton = document.getElementById('contributor-email-submit')
+		submitButton.addEventListener('click', function() {
+			const inputValue = document.getElementById('contributor-email-input').value
+			localStorage.setItem('someKey', inputValue)
+
+			htmx.trigger(document.getElementById(element.id), 'click')
+		});
+	}
 }
+
