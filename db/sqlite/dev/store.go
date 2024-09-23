@@ -2,6 +2,7 @@ package dev
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	"github.com/camdenwithrow/rdmapp/db"
@@ -39,20 +40,33 @@ func (store DevSQLiteStore) GetUsers() {
 	}
 }
 
-func (store DevSQLiteStore) GetFeatures() {
-	rows, err := store.db.Query("SELECT id, name, description FROM features")
+func (store DevSQLiteStore) GetRoadmap(slug string) (*db.Roadmap, error) {
+	var roadmap db.Roadmap
+	row := store.db.QueryRow("SELECT * from roadmap where id = ?", slug)
+	if err := row.Scan(&roadmap); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("No roadmap with slug: %s", slug)
+		}
+		return nil, fmt.Errorf("Finding roadmap with slug %s failed: %v", slug, err)
+	}
+	return &roadmap, nil
+}
+
+func (store DevSQLiteStore) GetFeatures(roadmapId uint) ([]db.Feature, error) {
+	rows, err := store.db.Query("SELECT * FROM features")
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer rows.Close()
 
+	featureArr := []db.Feature{}
 	for rows.Next() {
-		var id int
-		var name, description string
-		err := rows.Scan(&id, &name, &description)
+		var feature db.Feature
+		err := rows.Scan(&feature)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
-		log.Printf("ID: %d, Name: %s, Description: %s\n", id, name, description)
+		featureArr = append(featureArr)
 	}
+	return featureArr, nil
 }

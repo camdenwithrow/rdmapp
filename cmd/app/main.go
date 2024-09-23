@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -10,7 +9,6 @@ import (
 	"github.com/camdenwithrow/rdmapp/config"
 	devDB "github.com/camdenwithrow/rdmapp/db/sqlite/dev"
 	"github.com/camdenwithrow/rdmapp/handlers"
-	"github.com/camdenwithrow/rdmapp/ui/views"
 )
 
 type (
@@ -28,25 +26,21 @@ func main() {
 	defer store.Close()
 	// store.GetFeatures()
 	// store.GetUsers()
+	handler := handlers.New(store)
 
 	admin := echo.New()
 	admin.Use(middleware.Logger())
 	admin.Use(middleware.Recover())
 	hosts[fmt.Sprintf("admin.%s:%s", cfg.PublicHost, cfg.Port)] = &Host{admin}
 
-	admin.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Admin")
-	})
+	admin.GET("/", handler.AdminDashHandler)
 
 	site := echo.New()
 	site.Use(middleware.Logger())
 	site.Use(middleware.Recover())
 	hosts[fmt.Sprintf("%s:%s", cfg.PublicHost, cfg.Port)] = &Host{site}
 
-	site.GET("/", func(c echo.Context) error {
-		// return c.String(http.StatusOK, "Website")
-		return handlers.Render(c, http.StatusOK, views.Roadmap())
-	})
+	site.GET("/", handler.RoadmapHandler)
 
 	e := echo.New()
 	e.Static("/static", "static")
