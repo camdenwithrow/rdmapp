@@ -1,11 +1,13 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/a-h/templ"
 	"github.com/camdenwithrow/rdmapp/db"
 	"github.com/camdenwithrow/rdmapp/ui/views"
+	"github.com/camdenwithrow/rdmapp/ui/views/oops"
 	"github.com/labstack/echo/v4"
 )
 
@@ -28,7 +30,13 @@ func Render(ctx echo.Context, statusCode int, t templ.Component) error {
 }
 
 func (h *Handler) RoadmapHandler(c echo.Context) error {
-	id := c.Param("id")
+	slug := c.Param("id")
+	roadmap, err := h.store.GetRoadmap(slug)
+	if err != nil {
+		return Render(c, http.StatusNotFound, oops.NotFound())
+	}
+	features, err := h.store.GetFeatures(roadmap.ID)
+	fmt.Println(features[0].Name)
 
 	return Render(c, http.StatusOK, views.Roadmap())
 }
