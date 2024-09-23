@@ -42,8 +42,8 @@ func (store DevSQLiteStore) GetUsers() {
 
 func (store DevSQLiteStore) GetRoadmap(slug string) (*db.Roadmap, error) {
 	var roadmap db.Roadmap
-	row := store.db.QueryRow("SELECT * from roadmap where id = ?", slug)
-	if err := row.Scan(&roadmap); err != nil {
+	row := store.db.QueryRow("SELECT id, owner_id, slug, title, logo FROM roadmaps WHERE slug = ?", slug)
+	if err := row.Scan(&roadmap.ID, &roadmap.OwnerId, &roadmap.Slug, &roadmap.Title, &roadmap.Logo); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("No roadmap with slug: %s", slug)
 		}
@@ -53,7 +53,7 @@ func (store DevSQLiteStore) GetRoadmap(slug string) (*db.Roadmap, error) {
 }
 
 func (store DevSQLiteStore) GetFeatures(roadmapId uint) ([]db.Feature, error) {
-	rows, err := store.db.Query("SELECT * FROM features")
+	rows, err := store.db.Query("SELECT id, roadmap_id, name, description, status, priority FROM features WHERE roadmap_id = ?", roadmapId)
 	if err != nil {
 		return nil, err
 	}
@@ -62,11 +62,11 @@ func (store DevSQLiteStore) GetFeatures(roadmapId uint) ([]db.Feature, error) {
 	featureArr := []db.Feature{}
 	for rows.Next() {
 		var feature db.Feature
-		err := rows.Scan(&feature)
+		err := rows.Scan(&feature.ID, &feature.RoadmapID, &feature.Name, &feature.Description, &feature.Status, &feature.Priority)
 		if err != nil {
 			return nil, err
 		}
-		featureArr = append(featureArr)
+		featureArr = append(featureArr, feature)
 	}
 	return featureArr, nil
 }

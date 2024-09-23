@@ -7,7 +7,6 @@ import (
 	"github.com/a-h/templ"
 	"github.com/camdenwithrow/rdmapp/db"
 	"github.com/camdenwithrow/rdmapp/ui/views"
-	"github.com/camdenwithrow/rdmapp/ui/views/oops"
 	"github.com/labstack/echo/v4"
 )
 
@@ -33,12 +32,21 @@ func (h *Handler) RoadmapHandler(c echo.Context) error {
 	slug := c.Param("id")
 	roadmap, err := h.store.GetRoadmap(slug)
 	if err != nil {
-		return Render(c, http.StatusNotFound, oops.NotFound())
+		fmt.Printf("Error getting roadmap with slug: %s\nError: %v", slug, err)
 	}
 	features, err := h.store.GetFeatures(roadmap.ID)
-	fmt.Println(features[0].Name)
+	if err != nil {
+		fmt.Printf("Error getting features error: %v", err)
+	}
+	featuresByCategory := make(map[string][]db.Feature)
+	for _, v := range features {
+		if x, found := featuresByCategory[v.Status]; found {
+			featuresByCategory[v.Status] = append(x, v)
+		}
+		featuresByCategory[v.Status] = []db.Feature{v}
+	}
 
-	return Render(c, http.StatusOK, views.Roadmap())
+	return Render(c, http.StatusOK, views.Roadmap(roadmap.Logo, roadmap.Title, featuresByCategory))
 }
 
 func (h *Handler) AdminDashHandler(c echo.Context) error {

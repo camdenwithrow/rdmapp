@@ -2,6 +2,7 @@ package views
 
 import "github.com/camdenwithrow/rdmapp/ui/views/layouts"
 import "github.com/camdenwithrow/rdmapp/ui/views/components"
+import "github.com/camdenwithrow/rdmapp/db"
 
 templ themeController() {
 	<script>
@@ -62,8 +63,8 @@ templ upArrowIcon() {
 	</svg>
 }
 
-templ feature() {
-	<div onclick="openDialog('feature')" class="relative group/feature flex cursor-pointer gap-3 py-4 pr-4 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/50">
+templ feature(feature db.Feature) {
+	<div class="relative group/feature flex cursor-pointer gap-3 py-4 pr-4 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/50">
 		<div class="flex flex-col items-center ml-4 w-12">
 			<button type="button" class="group/upvote peer/upvote h-7 min-h-7 w-7 p-1.5 mt-1 transition-colors border border-zinc-400 hover:bg-zinc-600 hover:border-zinc-600 dark:border-zinc-500 dark:hover:bg-zinc-300 dark:hover:border-zinc-300 rounded">
 				@upArrowIcon()
@@ -73,8 +74,8 @@ templ feature() {
 			</div>
 		</div>
 		<div>
-			<h4 class="text-base font-bold text-zinc-700 dark:text-zinc-200 pb-1">Smaller Feature Title</h4>
-			<p class="text-xs text-zinc-500 dark:text-zinc-400">This is just a little jot of what it will be</p>
+			<h4 class="text-base font-bold text-zinc-700 dark:text-zinc-200 pb-1">{ feature.Name }</h4>
+			<p class="text-xs text-zinc-500 dark:text-zinc-400">{ feature.Description }</p>
 		</div>
 		<span class="absolute h-px w-[calc(100%-1.5rem)] -bottom-px left-1/2 transform -translate-x-1/2 bg-zinc-200 dark:bg-zinc-700 group-hover/feature:w-full"></span>
 		<span class="absolute h-px w-[calc(100%-1.5rem)] top-0 left-1/2 transform -translate-x-1/2 bg-zinc-200 dark:bg-zinc-700 group-hover/feature:w-full"></span>
@@ -83,18 +84,19 @@ templ feature() {
 
 var onceHandle = templ.NewOnceHandle()
 
-templ Roadmap(featureData any) {
-	@layouts.Base() {
+templ Roadmap(logo string, title string, features map[string][]db.Feature) {
+	@Base() {
 		@navbar()
 		@components.Sheet("feature-request")
 		@components.Dialog("feature")
 		@templ.JSONScript("feature-data", featureData)
 		<div class="h-[calc(100%-4rem)]  max-h-[calc(100%-4rem)]  p-4 pt-0">
 			<div class="h-full flex flex-col md:grid md:grid-cols-4 shadow rounded bg-zinc-50 dark:bg-zinc-900 dark:border dark:border-zinc-700">
-				for _, val := range []string{"Under Consideration", "Planned", "Rejected", "Completed"} {
-					@columnCard(val) {
-						for i := 0; i < 50; i++ {
-							@feature()
+				//for _, val := range []string{"Under Consideration", "Planned", "Rejected", "Completed"} {
+				for key, _ := range features {
+					@columnCard(key) {
+						for _, val := range features[key] {
+							@feature(val)
 						}
 					}
 				}
