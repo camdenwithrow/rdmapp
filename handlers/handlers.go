@@ -43,8 +43,9 @@ func (h *Handler) RoadmapHandler(c echo.Context) error {
 	for _, v := range features {
 		if x, found := featuresByCategory[v.Status]; found {
 			featuresByCategory[v.Status] = append(x, v)
+		} else {
+			featuresByCategory[v.Status] = []db.Feature{v}
 		}
-		featuresByCategory[v.Status] = []db.Feature{v}
 	}
 
 	return Render(c, http.StatusOK, views.Roadmap(roadmap.Logo, roadmap.Title, featuresByCategory))

@@ -66,7 +66,7 @@ templ upArrowIcon() {
 templ feature(feature db.Feature) {
 	<div class="relative group/feature flex cursor-pointer gap-3 py-4 pr-4 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/50">
 		<div class="flex flex-col items-center ml-4 w-12">
-			<button type="button" class="group/upvote peer/upvote h-7 min-h-7 w-7 p-1.5 mt-1 transition-colors border border-zinc-400 hover:bg-zinc-600 hover:border-zinc-600 dark:border-zinc-500 dark:hover:bg-zinc-300 dark:hover:border-zinc-300 rounded">
+			<button type="button" onclick="handleUpvote(this)" feature-id={ templ.JSONString(feature.ID) } class="group/upvote peer/upvote h-7 min-h-7 w-7 p-1.5 mt-1 transition-colors border border-zinc-400 hover:bg-zinc-600 hover:border-zinc-600 dark:border-zinc-500 dark:hover:bg-zinc-300 dark:hover:border-zinc-300 rounded">
 				@upArrowIcon()
 			</button>
 			<div class="pt-1 text-center flex justify-center w-full text-zinc-600 dark:text-zinc-400 transition-colors peer-hover/upvote:text-zinc-800 dark:peer-hover/upvote:text-zinc-300">

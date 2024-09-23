@@ -80,7 +80,7 @@ function closeDialog(id) {
 	}, 400)
 }
 
-function openFeatureDialog(element: HTMLDivElement) {
-	element.getAttribute("id")
-
+function handleUpvote(buttonEl) {
+	const featureId = JSON.parse(buttonEl.getAttribute("feature-id"))
+	console.log(featureId)
 }
