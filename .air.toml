@@ -5,7 +5,7 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "./tmp/main"
-  pre_cmd = ["(cd ui && npx tailwindcss -i ./styles.css -o ../static/css/output.css)", "templ generate"]
+  pre_cmd = ["rm test.db","(cd ui && npx tailwindcss -i ./styles.css -o ../static/css/output.css)", "templ generate"]
   cmd = "go build -o ./tmp/main ./cmd/app"
   post_cmd = []
   delay = 1000

@@ -36,11 +36,11 @@ func main() {
 	admin.GET("/", handler.AdminDashHandler)
 
 	site := echo.New()
-	site.Use(middleware.Logger())
-	site.Use(middleware.Recover())
+	// site.Use(middleware.Logger())
+	// site.Use(middleware.Recover())
 	hosts[fmt.Sprintf("%s:%s", cfg.PublicHost, cfg.Port)] = &Host{site}
 
-	site.GET("/", handler.RoadmapHandler)
+	site.GET("/:id", handler.RoadmapHandler)
 
 	e := echo.New()
 	e.Static("/static", "static")
