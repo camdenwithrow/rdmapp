@@ -7,6 +7,7 @@ import (
 	"github.com/a-h/templ"
 	"github.com/camdenwithrow/rdmapp/db"
 	"github.com/camdenwithrow/rdmapp/ui/views"
+	"github.com/camdenwithrow/rdmapp/ui/views/layouts"
 	"github.com/labstack/echo/v4"
 )
 
@@ -50,9 +51,9 @@ func (h *Handler) RoadmapHandler(c echo.Context) error {
 }
 
 func (h *Handler) AdminDashHandler(c echo.Context) error {
-	return Render(c, http.StatusOK, views.Base())
+	return Render(c, http.StatusOK, layouts.Base())
 }
 
 func (h *Handler) LandingPageHandler(c echo.Context) error {
-	return Render(c, http.StatusOK, views.Base())
+	return Render(c, http.StatusOK, layouts.Base())
 }

@@ -85,15 +85,15 @@ templ feature(feature db.Feature) {
 var onceHandle = templ.NewOnceHandle()
 
 templ Roadmap(logo string, title string, features map[string][]db.Feature) {
-	@Base() {
+	@layouts.Base() {
 		@navbar()
 		@components.Sheet("feature-request")
 		@components.Dialog("feature")
-		@templ.JSONScript("feature-data", featureData)
+		@templ.JSONScript("feature-data", features)
 		<div class="h-[calc(100%-4rem)]  max-h-[calc(100%-4rem)]  p-4 pt-0">
 			<div class="h-full flex flex-col md:grid md:grid-cols-4 shadow rounded bg-zinc-50 dark:bg-zinc-900 dark:border dark:border-zinc-700">
 				//for _, val := range []string{"Under Consideration", "Planned", "Rejected", "Completed"} {
-				for key, _ := range features {
+				for key := range features {
 					@columnCard(key) {
 						for _, val := range features[key] {
 							@feature(val)
