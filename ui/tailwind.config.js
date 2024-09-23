@@ -2,6 +2,7 @@
 module.exports = {
   content: [
     './**/*.{html,go,templ}',
+    '../static/js/*.js'
   ],
   theme: {
     extend: {},

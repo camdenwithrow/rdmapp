@@ -1,5 +1,8 @@
 package views
 
+import "github.com/camdenwithrow/rdmapp/ui/views/layouts"
+import "github.com/camdenwithrow/rdmapp/ui/views/components"
+
 templ themeController() {
 	<script>
 		function toggleDarkMode() {
@@ -17,12 +20,12 @@ templ themeController() {
 }
 
 templ navbar() {
-	<div class="flex justify-between items-center py-3 px-6 h-18">
-		<div class="flex justify-center items-center">
+	<div class="flex justify-between items-center py-3 px-6 h-16">
+		<div onclick="openDialog('feature')" class="flex justify-center items-center">
 			<img src="https://placehold.co/60x40"/>
 		</div>
 		<div>
-			<button type="button" class="text-sm font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200">
+			<button type="button" onclick="openSheet('feature-request')" class="text-sm font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200">
 				Request Feature
 				<hr class="border-zinc-400 dark:border-zinc-500 group-hover:border-zinc-300 dark:group-hover:border-zinc-400"/>
 			</button>
@@ -31,7 +34,7 @@ templ navbar() {
 }
 
 templ columnCard(title string) {
-	<div class="relative h-0 min-h-full max-h-full overflow-hidden  border-r last:border-0 dark:border-zinc-700">
+	<div class="relative h-0 min-h-full max-h-full overflow-hidden border-r last:border-0 dark:border-zinc-700">
 		<h2 class="pt-3 pb-2 px-4 font-bold text-sm text-nowrap text-zinc-600 dark:text-zinc-400 shadow-teal-500">{ title }</h2>
 		<div class="overflow-y-auto h-[calc(100%-2.5rem)]">
 			{ children... }
@@ -60,7 +63,7 @@ templ upArrowIcon() {
 }
 
 templ feature() {
-	<div class="relative group/feature flex cursor-pointer gap-3 py-4 pr-4 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/50">
+	<div onclick="openDialog('feature')" class="relative group/feature flex cursor-pointer gap-3 py-4 pr-4 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/50">
 		<div class="flex flex-col items-center ml-4 w-12">
 			<button type="button" class="group/upvote peer/upvote h-7 min-h-7 w-7 p-1.5 mt-1 transition-colors border border-zinc-400 hover:bg-zinc-600 hover:border-zinc-600 dark:border-zinc-500 dark:hover:bg-zinc-300 dark:hover:border-zinc-300 rounded">
 				@upArrowIcon()
@@ -78,10 +81,15 @@ templ feature() {
 	</div>
 }
 
-templ Roadmap() {
-	@Base() {
+var onceHandle = templ.NewOnceHandle()
+
+templ Roadmap(featureData any) {
+	@layouts.Base() {
 		@navbar()
-		<div class="h-full max-h-full p-4 pt-0">
+		@components.Sheet("feature-request")
+		@components.Dialog("feature")
+		@templ.JSONScript("feature-data", featureData)
+		<div class="h-[calc(100%-4rem)]  max-h-[calc(100%-4rem)]  p-4 pt-0">
 			<div class="h-full flex flex-col md:grid md:grid-cols-4 shadow rounded bg-zinc-50 dark:bg-zinc-900 dark:border dark:border-zinc-700">
 				for _, val := range []string{"Under Consideration", "Planned", "Rejected", "Completed"} {
 					@columnCard(val) {
@@ -92,5 +100,14 @@ templ Roadmap() {
 				}
 			</div>
 		</div>
+		@onceHandle.Once() {
+			<script>
+				document.querySelectorAll("[id]").forEach((el) => {
+					if(el.id.includes("sanitize:")){
+						el.id = JSON.parse(el.id).substring(el.id.indexOf(":"))
+					}
+				});
+			</script>
+		}
 	}
 }
