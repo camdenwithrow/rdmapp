@@ -10,9 +10,12 @@ import (
 )
 
 type Config struct {
-	PublicHost  string
-	Port        string
-	Environment string
+	PublicHost         string
+	Port               string
+	Environment        string
+	SessionSecret      string
+	GithubClientID     string
+	GithubClientSecret string
 }
 
 var (
@@ -27,9 +30,12 @@ func loadConfig() {
 			log.Printf("Error loading .env file: %v", err)
 		}
 		cfg = &Config{
-			PublicHost:  getEnv("PUBLIC_HOST", "localhost"),
-			Port:        getEnv("PORT", "8080"),
-			Environment: getEnvOrError("ENVIRONMENT"),
+			PublicHost:         getEnv("PUBLIC_HOST", "localhost"),
+			Port:               getEnv("PORT", "8080"),
+			Environment:        getEnvOrError("ENVIRONMENT"),
+			SessionSecret:      getEnvOrError("SESSION_SECRET"),
+			GithubClientID:     getEnvOrError("GITHUB_CLIENT_ID"),
+			GithubClientSecret: getEnvOrError("GITHUB_CLIENT_SECRET"),
 		}
 	})
 }
